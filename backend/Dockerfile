@@ -15,11 +15,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application
 COPY . .
 
+# Create static directory (fixes STATICFILES_DIRS warning)
+RUN mkdir -p /app/static
+
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput || true
 
 # Expose port
 EXPOSE 8000
 
-# Run
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+# Entrypoint handles migrations and product loading
+ENTRYPOINT ["sh", "-c", "python manage.py migrate --noinput && python manage.py loaddata fixtures/initial.json || python manage.py load_products || true && exec gunicorn --bind 0.0.0.0:8000 config.wsgi:application"]

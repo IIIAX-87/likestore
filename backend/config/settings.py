@@ -67,20 +67,47 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-DATABASE_URL = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+# Database - Parse DATABASE_URL or use environment variables
+import re
 
-if 'postgres' in DATABASE_URL:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRES_DB', 'likestore'),
-            'USER': os.getenv('POSTGRES_USER', 'likestore'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'likestore_password'),
-            'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+def parse_db_url(url):
+    """Parse database URL into components."""
+    if not url or not url.startswith('postgres'):
+        return None
+    # postgres://user:pass@host:port/dbname
+    match = re.match(r'postgres://([^:]+):([^@]+)@([^:]+):([^/]+)/(.+)', url)
+    if match:
+        return match.groups()
+    return None
+
+DATABASE_URL = os.getenv('DATABASE_URL', '')
+
+if DATABASE_URL and 'postgres' in DATABASE_URL:
+    db_creds = parse_db_url(DATABASE_URL)
+    if db_creds:
+        db_user, db_pass, db_host, db_port, db_name = db_creds
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': db_name,
+                'USER': db_user,
+                'PASSWORD': db_pass,
+                'HOST': db_host,
+                'PORT': db_port,
+            }
         }
-    }
+    else:
+        # Fallback to environment variables
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': os.getenv('POSTGRES_DB', 'likestore'),
+                'USER': os.getenv('POSTGRES_USER', 'likestore'),
+                'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'likestore_password'),
+                'HOST': os.getenv('POSTGRES_HOST', 'db'),
+                'PORT': os.getenv('POSTGRES_PORT', '5432'),
+            }
+        }
 else:
     DATABASES = {
         'default': {
