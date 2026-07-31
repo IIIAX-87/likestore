@@ -27,6 +27,25 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model with email authentication."""
 
+    # Fix reverse accessor conflicts with Django's auth.User
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name=_('Groups'),
+        blank=True,
+        help_text=_('Groups this user belongs to.'),
+        related_name='likestore_user_set',  # Changed from default 'user_set'
+        related_query_name='likestore_user',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name=_('User permissions'),
+        blank=True,
+        help_text=_('Specific permissions for this user.'),
+        related_name='likestore_user_set',  # Changed from default 'user_set'
+        related_query_name='likestore_user',
+    )
+    """Custom user model with email authentication."""
+
     email = models.EmailField(_('Email'), unique=True)
     first_name = models.CharField(_('First name'), max_length=150, blank=True)
     last_name = models.CharField(_('Last name'), max_length=150, blank=True)
