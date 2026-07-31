@@ -17,8 +17,25 @@ from products.models import Category, Brand, Product, ProductImage
 
 
 def load_data():
-    # Find parsed_data.json (in /app/parser_data from docker volume)
-    data_file = os.path.join('/app', 'parser_data', 'parsed_data.json')
+    # Find parsed_data.json - try multiple paths
+    possible_paths = [
+        '/app/parser_data/parsed_data.json',  # Docker volume
+        '/app/backend/../parser/src/parsed_data.json',  # Relative from backend
+        os.path.join(os.path.dirname(__file__), '..', 'parser', 'src', 'parsed_data.json'),  # Local dev
+        'parsed_data.json',  # Current directory
+    ]
+    
+    data_file = None
+    for path in possible_paths:
+        if os.path.exists(path):
+            data_file = path
+            break
+    
+    if not data_file:
+        print(f"❌ Файл не найден. Искали в:")
+        for p in possible_paths:
+            print(f"  - {p}")
+        return
     
     if not os.path.exists(data_file):
         print(f"❌ Файл не найден: {data_file}")
