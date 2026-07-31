@@ -36,6 +36,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./backend:/app
+      - ./parser/src:/app/parser_data:ro
       - media_data:/app/media
     ports:
       - "8000:8000"
@@ -70,21 +71,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-
-  # Data Loader - loads products from parsed_data.json
-  loader:
-    build:
-      context: ./parser
-      dockerfile: Dockerfile
-    volumes:
-      - ./parser:/app
-    environment:
-      - DATABASE_URL=postgres://likestore:likestore_password@db:5432/likestore
-      - PYTHONPATH=/app/src:/app/backend
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: "no"
 
   # Next.js Frontend
   frontend:
