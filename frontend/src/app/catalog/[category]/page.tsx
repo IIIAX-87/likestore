@@ -1,6 +1,6 @@
 import ProductCard from "@/components/ProductCard";
+import SortSelect from "@/components/SortSelect";
 import {
-	productsAPI,
 	categoriesAPI,
 	type Product,
 	type Category,
@@ -68,13 +68,6 @@ export default async function CategoryPage({
 	const productList: Product[] = products.results || [];
 	const totalCount = products.count || 0;
 	const totalPages = Math.ceil(totalCount / 20);
-
-	const sortOptions = [
-		{ value: "-created_at", label: "По новизне" },
-		{ value: "price", label: "Сначала дешевле" },
-		{ value: "-price", label: "Сначала дороже" },
-		{ value: "name", label: "По названию" },
-	];
 
 	return (
 		<div className="catalog-page">
@@ -169,20 +162,10 @@ export default async function CategoryPage({
 
 							<div className="catalog-sort">
 								<span>Сортировка:</span>
-								<select
+								<SortSelect
 									defaultValue={ordering}
-									onChange={(e) => {
-										const url = new URL(window.location.href);
-										url.searchParams.set("ordering", e.target.value);
-										window.location.href = url.toString();
-									}}
-								>
-									{sortOptions.map((opt) => (
-										<option key={opt.value} value={opt.value}>
-											{opt.label}
-										</option>
-									))}
-								</select>
+									categorySlug={resolvedParams.category}
+								/>
 							</div>
 						</div>
 
