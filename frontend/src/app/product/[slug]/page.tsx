@@ -61,9 +61,16 @@ export default function ProductPage() {
 
 	if (error || !product) {
 		return (
-			<div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
+			<div
+				className="container"
+				style={{ padding: "4rem 0", textAlign: "center" }}
+			>
 				<h1>Товар не найден</h1>
-				<Link href="/catalog/" className="btn btn--primary" style={{ marginTop: "1rem" }}>
+				<Link
+					href="/catalog/"
+					className="btn btn--primary"
+					style={{ marginTop: "1rem" }}
+				>
 					Вернуться в каталог
 				</Link>
 			</div>
@@ -82,14 +89,23 @@ export default function ProductPage() {
 		<>
 			<div className="product-detail">
 				<div className="container">
-					<nav className="breadcrumbs" style={{ marginBottom: "1rem", fontSize: "0.875rem", color: "#666" }}>
+					<nav
+						className="breadcrumbs"
+						style={{
+							marginBottom: "1rem",
+							fontSize: "0.875rem",
+							color: "#666",
+						}}
+					>
 						<Link href="/">Главная</Link>
 						<span style={{ margin: "0 0.5rem" }}>/</span>
 						<Link href="/catalog/">Каталог</Link>
 						{product.category && (
 							<>
 								<span style={{ margin: "0 0.5rem" }}>/</span>
-								<Link href={`/catalog/${product.category.slug}/`}>{product.category.name}</Link>
+								<Link href={`/catalog/${product.category.slug}/`}>
+									{product.category.name}
+								</Link>
 							</>
 						)}
 						<span style={{ margin: "0 0.5rem" }}>/</span>
@@ -122,14 +138,26 @@ export default function ProductPage() {
 
 						<div className="product-info">
 							<div className="product-info__header">
-								{product.brand && <p className="product-info__brand">{product.brand.name}</p>}
+								{product.brand && (
+									<p className="product-info__brand">{product.brand.name}</p>
+								)}
 								<h1 className="product-info__title">{product.name}</h1>
-								{product.article && <p className="product-info__article">Артикул: {product.article}</p>}
+								{product.article && (
+									<p className="product-info__article">
+										Артикул: {product.article}
+									</p>
+								)}
 							</div>
 
 							<div className="product-info__price">
-								<span className="product-info__price-current">{formatPrice(product.price)}</span>
-								{hasDiscount && <span className="product-info__price-old">{formatPrice(product.old_price!)}</span>}
+								<span className="product-info__price-current">
+									{formatPrice(product.price)}
+								</span>
+								{hasDiscount && (
+									<span className="product-info__price-old">
+										{formatPrice(product.old_price!)}
+									</span>
+								)}
 							</div>
 
 							<div className="product-info__description">

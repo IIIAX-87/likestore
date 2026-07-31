@@ -343,7 +343,7 @@ async def main():
         categories = await parser.parse_main_page()
         
         # Parse each category
-        for category in categories[:3]:  # Limit to 3 categories for demo
+        for category in categories:  # All 11 categories
             products = await parser.parse_category(category)
             parser.products.extend(products)
         
