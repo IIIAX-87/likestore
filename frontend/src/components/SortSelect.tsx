@@ -14,7 +14,10 @@ interface SortSelectProps {
 	categorySlug: string;
 }
 
-export default function SortSelect({ defaultValue, categorySlug }: SortSelectProps) {
+export default function SortSelect({
+	defaultValue,
+	categorySlug,
+}: SortSelectProps) {
 	const router = useRouter();
 
 	const handleSort = (value: string) => {

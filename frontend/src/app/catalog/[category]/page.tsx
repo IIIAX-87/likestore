@@ -1,10 +1,6 @@
 import ProductCard from "@/components/ProductCard";
 import SortSelect from "@/components/SortSelect";
-import {
-	categoriesAPI,
-	type Product,
-	type Category,
-} from "@/lib/api";
+import { categoriesAPI, type Product, type Category } from "@/lib/api";
 import Link from "next/link";
 
 interface CategoryPageProps {
