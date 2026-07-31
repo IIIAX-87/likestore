@@ -34,9 +34,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate --fake-initial &&
+             python manage.py migrate &&
+             gunicorn --bind 0.0.0.0:8000 config.wsgi:application"
     volumes:
       - ./backend:/app
-      - ./parser/src:/app/parser_data:ro
+      - ./parser:/app/parser_data:ro
       - media_data:/app/media
     ports:
       - "8000:8000"
