@@ -15,14 +15,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application
 COPY . .
 
-# Create required directories
+# Create required directories (will be recreated if volume mounts over them)
 RUN mkdir -p /app/static /app/media /app/parser/src
-
-# Create empty parsed_data.json if not exists
 RUN touch /app/parser/src/parsed_data.json
 
 # Expose port
 EXPOSE 8000
 
 # Entrypoint handles migrations and starts gunicorn
-ENTRYPOINT ["sh", "-c", "python manage.py migrate --fake-initial && python manage.py migrate && exec gunicorn --bind 0.0.0.0:8000 config.wsgi:application"]
+# mkdir is needed because volume mount may override static directory
+ENTRYPOINT ["sh", "-c", "mkdir -p /app/static && python manage.py migrate --fake-initial && python manage.py migrate && exec gunicorn --bind 0.0.0.0:8000 config.wsgi:application"]
