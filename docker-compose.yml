@@ -76,7 +76,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    command: npm run dev -- --host 0.0.0.0
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -84,6 +83,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - HOST=0.0.0.0
     depends_on:
       - backend
 
