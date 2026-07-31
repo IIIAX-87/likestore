@@ -7,9 +7,16 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy backend code for Django imports
+COPY backend/ /app/backend/
 
-COPY . .
+# Install Django and dependencies
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
-CMD ["python", "src/load_to_db.py"]
+# Copy parser source
+COPY src/ /app/src/
+
+# Environment
+ENV PYTHONPATH=/app
+
+CMD ["python", "/app/src/load_to_db.py"]
