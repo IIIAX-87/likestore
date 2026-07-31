@@ -40,6 +40,13 @@ class Order(models.Model):
         related_name='orders',
         verbose_name='Пользователь'
     )
+    session_key = models.CharField(
+        max_length=40,
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name='Ключ сессии'
+    )
 
     # Contact info
     first_name = models.CharField(max_length=150, verbose_name='Имя')
