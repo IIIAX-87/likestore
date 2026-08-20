@@ -31,7 +31,7 @@ class Command(BaseCommand):
         else:
             # Default path
             json_path = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+                os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
                 'parser', 'src', 'parsed_data.json'
             )
 
