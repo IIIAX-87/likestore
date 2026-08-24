@@ -132,11 +132,18 @@ def run_parser_sync(request):
     import threading
     import time
     
-    # Путь к парсеру
+    # Путь к парсеру - работает и локально и в Docker
     backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     likestore_dir = os.path.dirname(backend_dir)
-    parser_script = os.path.join(likestore_dir, 'parser', 'src', 'fetch_categories.py')
-    venv_python = os.path.join(likestore_dir, 'parser', 'venv', 'bin', 'python')
+    
+    # Docker: likestore_dir = /app, Local: likestore_dir = likestore
+    if os.path.basename(likestore_dir) == 'app':
+        project_root = likestore_dir
+    else:
+        project_root = likestore_dir
+    
+    parser_script = os.path.join(project_root, 'parser', 'src', 'fetch_categories.py')
+    venv_python = os.path.join(project_root, 'parser', 'venv', 'bin', 'python')
     
     # Проверяем существование
     if not os.path.exists(parser_script):
@@ -196,11 +203,22 @@ def run_parser_view(request):
     from django.core.management import call_command
     import time
     
-    # Пути
-    backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    likestore_dir = os.path.dirname(backend_dir)
-    json_path = os.path.join(likestore_dir, 'parser', 'src', 'parsed_data.json')
-    parser_script = os.path.join(likestore_dir, 'parser', 'src', 'fetch_categories.py')
+    # Пути - работает и локально и в Docker (/app)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    likestore_dir = os.path.dirname(base_dir)
+    
+    # Если в Docker - base_dir уже будет /app/backend, likestore_dir = /app
+    # Если локально - base_dir = likestore/backend, likestore_dir = likestore
+    # Проверяем структуру
+    if os.path.basename(likestore_dir) == 'app':
+        # Docker environment
+        project_root = likestore_dir
+    else:
+        # Local environment
+        project_root = likestore_dir
+    
+    json_path = os.path.join(project_root, 'parser', 'src', 'parsed_data.json')
+    parser_script = os.path.join(project_root, 'parser', 'src', 'fetch_categories.py')
     
     context = {
         'title': '🕷️ Импорт товаров с сайта',
