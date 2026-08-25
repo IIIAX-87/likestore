@@ -1,22 +1,14 @@
-{% extends "admin/index.html" %}
-
-{% block branding %}
-{{ block.super }}
+{% extends "admin/index.html" %} {% block branding %} {{ block.super }}
 <div class="parser-quick-btn">
-    <a href="{% url 'run_parser' %}" class="parser-btn">
-        🕷️ Импорт товаров
-    </a>
+  <a href="/admin/parser/" class="parser-btn"> 🕷️ Импорт товаров </a>
 </div>
-{% endblock %}
-
-{% block extrastyle %}
-{{ block.super }}
+{% endblock %} {% block extrastyle %} {{ block.super }}
 <style>
-.parser-quick-btn {
+  .parser-quick-btn {
     margin-left: auto;
     padding: 5px 15px;
-}
-.parser-btn {
+  }
+  .parser-btn {
     display: inline-block;
     padding: 8px 16px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -26,10 +18,10 @@
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s;
-}
-.parser-btn:hover {
+  }
+  .parser-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
+  }
 </style>
 {% endblock %}
